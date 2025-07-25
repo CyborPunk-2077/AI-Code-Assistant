@@ -1,0 +1,213 @@
+{
+  "name": "aicodeassist",
+  "displayName": "AI Code Assistant",
+  "description": "A VS Code extension powered by Gemini",
+  "version": "0.0.1",
+  "author": "Abhishek Tiwary",
+  "publisher": "abhishektiwary",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gemini.createRefactor",
+        "title": "AI Code Assist: Create/Refactor Code",
+        "icon": "$(wand)"
+      },
+      {
+        "command": "gemini.askExplain",
+        "title": "AI Code Assist: Ask/Explain Code",
+        "icon": "$(question)"
+      },
+      {
+        "command": "gemini.fix",
+        "title": "AI Code Assist: Fix Code",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "gemini.debug",
+        "title": "AI Code Assist: Debug Code",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "gemini.suggestMore",
+        "title": "AI Code Assist: Suggest Further Code",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "gemini.generateDoc",
+        "title": "AI Code Assist: Generate Documentation",
+        "icon": "$(book)"
+      },
+      {
+        "command": "gemini.codeReview",
+        "title": "AI Code Assist: Code Review",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "gemini.generateTests",
+        "title": "AI Code Assist: Generate Unit Tests",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "gemini.translateCode",
+        "title": "AI Code Assist: Translate Code",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "gemini.analyzeComplexity",
+        "title": "AI Code Assist: Analyze Code Complexity",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "aiCodeAssist.showWelcome",
+        "title": "AI Code Assist: Show Welcome",
+        "icon": "$(home)"
+      },
+      {
+        "command": "gemini.enableSuggestions",
+        "title": "AI Code Assist: Toggle Real-time Suggestions",
+        "category": "AI Code Assist",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "gemini.setApiKey",
+        "title": "AI Code Assist: Set API Key",
+        "icon": "$(key)"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "aiCodeAssist.menu",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "gemini.setApiKey",
+          "group": "navigation@1"
+        },
+        {
+          "command": "gemini.createRefactor",
+          "group": "navigation@2",
+          "when": "editorTextFocus && gemini.hasApiKey"
+        },
+        {
+          "command": "gemini.askExplain",
+          "group": "navigation@3",
+          "when": "editorTextFocus && gemini.hasApiKey"
+        }
+      ],
+      "aiCodeAssist.menu": [
+        {
+          "command": "gemini.setApiKey",
+          "group": "0_config@1"
+        },
+        {
+          "command": "gemini.createRefactor",
+          "group": "1_create@1"
+        },
+        {
+          "command": "gemini.askExplain",
+          "group": "1_create@2"
+        },
+        {
+          "command": "gemini.fix",
+          "group": "1_create@3"
+        },
+        {
+          "command": "gemini.debug",
+          "group": "1_create@4"
+        },
+        {
+          "command": "gemini.suggestMore",
+          "group": "1_create@5"
+        },
+        {
+          "command": "gemini.generateDoc",
+          "group": "2_generate@1"
+        },
+        {
+          "command": "gemini.codeReview",
+          "group": "2_generate@2"
+        },
+        {
+          "command": "gemini.generateTests",
+          "group": "2_generate@3"
+        },
+        {
+          "command": "gemini.translateCode",
+          "group": "3_tools@1"
+        },
+        {
+          "command": "gemini.analyzeComplexity",
+          "group": "3_tools@2"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "aiCodeAssist.menu",
+        "label": "AI Code Assistant"
+      }
+    ],
+    "configuration": {
+      "title": "AI Code Assistant",
+      "properties": {
+        "gemini.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your Gemini API key. Get it from https://makersuite.google.com/app/apikey",
+          "order": 1
+        },
+        "gemini.suggestions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable real-time code suggestions",
+          "order": 2
+        },
+        "gemini.suggestions.triggerCharacters": {
+          "type": "array",
+          "default": [".", " ", "(", ","],
+          "description": "Characters that trigger code suggestions and error fixing (comma triggers error fixing)",
+          "order": 3
+        },
+        "gemini.suggestions.debounceTime": {
+          "type": "number",
+          "default": 500,
+          "description": "Time in milliseconds to wait before showing suggestions",
+          "order": 4
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.1.3"
+  }
+}
